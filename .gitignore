@@ -131,6 +131,3 @@ dist
 
 #key
 key/
-
-#package
-package-lock.json
