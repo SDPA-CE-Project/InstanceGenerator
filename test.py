@@ -33,7 +33,7 @@ def video():
     #print(args.arg)
 
 
-    video_capture = cv2.VideoCapture(value_video+args.arg)
+    video_capture = cv2.VideoCapture("rtsp://"+readUser+":"+readPass+"@"+value_video+args.arg)
     video_capture.set(3, 480) #가로
     video_capture.set(4, 640) #세로
     fps = 10
@@ -122,6 +122,8 @@ with open('key/key.json') as keyFile:
     value_certificate = keyData["certificate"]
     value_url = keyData["db_url"]
     value_video = keyData["video_url"]
+    readUser = keyData["readUser"]
+    readPass = keyData["readPass"]
 
 cred = credentials.Certificate('key/'+value_certificate)
 firebase_admin.initialize_app(cred, {'databaseURL':value_url})
