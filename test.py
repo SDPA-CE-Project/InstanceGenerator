@@ -8,6 +8,7 @@ import dlib
 import numpy as np
 import time
 import argparse
+import sys
 from imutils import face_utils, resize
 from firebase_admin import credentials
 from firebase_admin import db
@@ -33,7 +34,7 @@ def video():
     #print(args.arg)
 
 
-    video_capture = cv2.VideoCapture("rtsp://"+readUser+":"+readPass+"@"+value_video+args.arg)
+    video_capture = cv2.VideoCapture("rtsp://"+readUser+":"+readPass+"@"+value_video+sys.argv[1])
     video_capture.set(3, 480) #가로
     video_capture.set(4, 640) #세로
     fps = 10
@@ -127,13 +128,9 @@ with open('key/key.json') as keyFile:
 
 cred = credentials.Certificate('key/'+value_certificate)
 firebase_admin.initialize_app(cred, {'databaseURL':value_url})
-#firebase_db = firestore.client()
-parser = argparse.ArgumentParser()
-parser.add_argument('arg')
-args = parser.parse_args()
 
-dir = db.reference('data/'+args.arg+'/ratio')  #realtime db
-dir_connection = db.reference('users/'+args.arg)
+dir = db.reference('data/'+sys.argv[2]+'/ratio')  #realtime db
+dir_connection = db.reference('users/'+sys.argv[2])
 
 connection(True)
 video()

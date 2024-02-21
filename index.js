@@ -8,6 +8,7 @@ const admin = require("firebase-admin");
 const {spawn} = require('child_process');
 const serviceAccount = require("./key/"+key.certificate);
 const { json } = require('express');
+const crypto = require('crypto')
 
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
@@ -23,18 +24,12 @@ ref.on('child_changed', (snapshot) => {
     console.log("key: "+snapshot.key);
     //newInstance(snapshot.key);
     if(check.chkConnectRequest == true && check.chkConnectResponse == false) {
-      console.log("Start Instance: "+snapshot.key)
-      const python = spawn('python', ['test.py', snapshot.key]);
+      console.log("Start Instance: "+snapshot.key);
+      const hash = crypto.createHash('sha256').update(snapshot.key).digest('hex');
+      const key = snapshot.key;
+      console.log("Hash: "+hash);
+      const args = [hash, key];
+      const python = spawn('python', ['test.py', hash, key]);
     }
     
-  //   python.stdout .on ('data', (data)=>{
-  //     console.log(`stdout : ${data}`);
-  //  })
 });
-
-// function newInstance(key) {
-//     const python = spawn('python', ['test.py',snapshot.key]);
-//     python.stdout .on ('data', (data)=>{
-//     console.log(`stdout : ${data}`);
-//   })
-// }
